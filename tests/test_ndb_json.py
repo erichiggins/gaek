@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-test_gaek
+test_ndb_json
 ----------------------------------
 
 Tests for `gaek` module.
@@ -10,10 +10,10 @@ Tests for `gaek` module.
 
 import unittest
 
-from gaek import gaek
+from gaek import ndb_json
 
 
-class TestGaek(unittest.TestCase):
+class TestNdbJson(unittest.TestCase):
 
     def setUp(self):
         pass

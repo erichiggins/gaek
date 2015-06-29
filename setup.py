@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup
+from setuptools import find_packages
 
 
 with open('README.rst') as readme_file:
@@ -30,15 +28,9 @@ setup(
     author="Eric Higgins",
     author_email='erichiggins@gmail.com',
     url='https://github.com/erichiggins/gaek',
-    packages=[
-        'gaek',
-    ],
-    package_dir={'gaek':
-                 'gaek'},
-    include_package_data=True,
+    packages=find_packages(exclude=['tests']),
     install_requires=requirements,
     license="BSD",
-    zip_safe=False,
     keywords='gaek',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
