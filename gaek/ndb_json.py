@@ -70,7 +70,7 @@ def encode_generator(obj):
 
 def encode_key(obj):
   """Get the Entity from the ndb.Key for further encoding."""
-  # Note(eric): Potentially poor performance for Models w/ many KeyProperty properties.
+  # NOTE(erichiggins): Potentially poor performance for Models w/ many KeyProperty properties.
   return obj.get_async()
   # Alternative 1: Convert into pairs.
   # return obj.pairs()
@@ -162,8 +162,9 @@ def iteritems(json_dict):
   for key, val in json_dict.iteritems():
     if isinstance(val, dict):
       iteritems(val)
+    # TODO(erichiggins): Find a better way to detect date/time-like strings.
     # Its a little hacky to check for specific chars, but avoids integers.
-    elif isinstance(val, basestring) and 'T' in val:
+    elif isinstance(val, basestring) and val.count('-') == 2 and len(val) > 9:
       try:
         json_dict[key] = dateutil.parser.parse(val)
         # Check for UTC.
