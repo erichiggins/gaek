@@ -6,25 +6,19 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
+with open('VERSION') as version_file:
+    VERSION = version_file.readline().rstrip('\n')
 
-with open('HISTORY.rst') as history_file:
-    history = history_file.read().replace('.. :changelog:', '')
+with open('requirements.txt') as requirements_file:
+    requirements = requirements_file.read()
 
-requirements = [
-    # TODO: put package requirements here
-]
-
-test_requirements = [
-    # TODO: put package test requirements here
-]
+with open('test_requirements.txt') as test_requirements_file:
+    test_requirements = test_requirements_file.read()
 
 setup(
     name='gaek',
-    version='0.1.0',
+    version=VERSION,
     description="A collection of useful tools for Python apps running on Google App Engine.",
-    long_description=readme + '\n\n' + history,
     author="Eric Higgins",
     author_email='erichiggins@gmail.com',
     url='https://github.com/erichiggins/gaek',
