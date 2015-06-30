@@ -19,6 +19,7 @@ parts/
 sdist/
 var/
 *.egg-info/
+*.egg*
 .installed.cfg
 *.egg
 
@@ -52,3 +53,5 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# Autoenv
+.env
