@@ -1,3 +1,8 @@
+0.1.1
+=====
+- Fixed issue in `MANIFEST.in` which excluded the `requirements.txt` files.
+
+
 0.1.0
 =====
 - Initial release
