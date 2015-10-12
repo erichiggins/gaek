@@ -1,10 +1,11 @@
-include CHANGELOG.md
 include LICENSE
 include VERSION
-include README.md
+include tox.ini
+include *.txt
+include *.md
+include *.rst
 
 recursive-include tests *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
-recursive-include *.txt
 recursive-include * *.rst *.md
