@@ -1,3 +1,8 @@
+0.1.2
+=====
+- Actually fix the MANIFEST.in contents.
+
+
 0.1.1
 =====
 - Fixed issue in `MANIFEST.in` which excluded the `requirements.txt` files.
