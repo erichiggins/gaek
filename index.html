@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>GAEK by erichiggins</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>GAEK</h1>
+        <p>Google App Engine Kit</p>
+
+        <p class="view"><a href="https://github.com/erichiggins/gaek">View the Project on GitHub <small>erichiggins/gaek</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/erichiggins/gaek/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/erichiggins/gaek/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/erichiggins/gaek">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h2>
+<a id="a-collection-of-useful-tools-for-python-apps-running-on-google-app-engine" class="anchor" href="#a-collection-of-useful-tools-for-python-apps-running-on-google-app-engine" aria-hidden="true"><span class="octicon octicon-link"></span></a>A collection of useful tools for Python apps running on Google App Engine.</h2>
+
+<ul>
+<li>Free software: BSD license</li>
+<li>Documentation: <a href="https://gaek.readthedocs.org">https://gaek.readthedocs.org</a>.</li>
+</ul>
+
+<h2>
+<a id="ndb-json-module" class="anchor" href="#ndb-json-module" aria-hidden="true"><span class="octicon octicon-link"></span></a>NDB JSON module</h2>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage:</h3>
+
+<pre><code>from gaek import ndb_json
+
+# Serialize NDB Model(s) to a JSON string.
+json_str = ndb_json.dumps(models)
+
+# Parse a JSON string into a Python dictionary.
+ndb_json.loads(json_str)
+</code></pre>
+
+<p>Feature parity with the Python <code>json</code> module functions.</p>
+
+<ul>
+<li><code>ndb_json.dumps</code></li>
+<li><code>ndb_json.dump</code></li>
+<li><code>ndb_json.loads</code></li>
+</ul>
+
+<h2>
+<a id="environment-module" class="anchor" href="#environment-module" aria-hidden="true"><span class="octicon octicon-link"></span></a>Environment module</h2>
+
+<ul>
+<li>
+<p><code>environ.get_dot_target_name(version=None, module=None)</code></p>
+
+<p>Returns the current version/module in <code>-dot-</code> notation which is used by <code>target:</code> parameters.</p>
+</li>
+<li>
+<p><code>environ.get_environ_dict()</code></p>
+
+<p>Return a dictionary of all environment keys/values.</p>
+</li>
+<li>
+<p><code>environ.is_host_google()</code></p>
+
+<p>True if the app is being hosted from Google App Engine servers.</p>
+</li>
+<li>
+<p><code>environ.is_development()</code></p>
+
+<p>True if the dev_appserver is running (localhost or local development server).</p>
+</li>
+<li>
+<p><code>environ.is_staging(version=None)</code></p>
+
+<p>True if the app is hosted by Google (appspot.com) but the version is not the default.</p>
+</li>
+<li>
+<p><code>environ.is_production(version=None)</code></p>
+
+<p>True if the app is being hosted by Google and the default version.</p>
+</li>
+<li>
+<p><code>environ.is_default_version(version=None)</code></p>
+
+<p>True if the current or specified app version is the default.</p>
+</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/erichiggins">erichiggins</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
