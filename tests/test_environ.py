@@ -51,6 +51,34 @@ class TestEnviron(unittest.TestCase):
         assert namespace_manager.get_namespace == environ.get_namespace
         assert namespace_manager.google_apps_namespace == environ.google_apps_namespace
 
+    def test_get_environ_dict(self):
+        # TODO(eric): This one is a bit hefty.
+        pass
+
+    def test_get_dot_target_name(self):
+        val = environ.get_dot_target_name()
+        assert val == 'testbed-version-dot-default', repr(val)
+
+    def test_is_host_google(self):
+        val = environ.is_host_google()
+        assert val == False, repr(val)
+
+    def test_is_development(self):
+        val = environ.is_development()
+        assert val == True, repr(val)
+
+    def test_is_staging(self):
+        val = environ.is_staging()
+        assert val == False, repr(val)
+
+    def test_is_production(self):
+        val = environ.is_production()
+        assert val == False, repr(val)
+
+    def test_is_default_version(self):
+        val = environ.is_default_version()
+        assert val == False, repr(val)
+
 
 if __name__ == '__main__':
     unittest.main()
