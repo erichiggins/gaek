@@ -7,7 +7,7 @@ GAEK: Google App Engine Kit
 A collection of useful tools for Python apps running on Google App Engine.
 
 * Free software: BSD license
-* Documentation: https://gaek.readthedocs.org.
+* Documentation: http://erichiggins.github.io/gaek/
 
 NDB JSON module
 ---------------
@@ -32,8 +32,6 @@ Feature parity with the Python `json` module functions.
 
 Environment module
 ------------------
-
-API:
 
 * `environ.get_dot_target_name(version=None, module=None)`
 
