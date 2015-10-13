@@ -1,11 +1,7 @@
 GAEK: Google App Engine Kit
 ===============================
 
-.. image:: https://img.shields.io/travis/erichiggins/gaek.svg
-        :target: https://travis-ci.org/erichiggins/gaek
-
-.. image:: https://img.shields.io/pypi/v/gaek.svg
-        :target: https://pypi.python.org/pypi/gaek
+[![Build Status](https://travis-ci.org/erichiggins/gaek.svg)](https://travis-ci.org/erichiggins/gaek)
 
 
 A collection of useful tools for Python apps running on Google App Engine.
@@ -34,3 +30,15 @@ Feature parity with the Python `json` module functions.
 `ndb_json.dump`
 
 `ndb_json.loads`
+
+
+Environment module
+------------------
+
+Usage:
+
+    from gaek import environ
+
+
+API:
+
