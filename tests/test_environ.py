@@ -39,13 +39,13 @@ class TestEnviron(unittest.TestCase):
         assert app_identity.get_service_account_name == environ.get_service_account_name
 
     def test_modules_functions(self):
-        assert namespace_manager.get_current_instance_id == environ.get_current_instance_id
-        assert namespace_manager.get_current_module_name == environ.get_current_module_name
-        assert namespace_manager.get_current_version_name == environ.get_current_version_name
-        assert namespace_manager.get_default_version == environ.get_default_version
-        assert namespace_manager.get_hostname == environ.get_hostname
-        assert namespace_manager.get_modules == environ.get_modules
-        assert namespace_manager.get_versions == environ.get_versions
+        assert modules.get_current_instance_id == environ.get_current_instance_id
+        assert modules.get_current_module_name == environ.get_current_module_name
+        assert modules.get_current_version_name == environ.get_current_version_name
+        assert modules.get_default_version == environ.get_default_version
+        assert modules.get_hostname == environ.get_hostname
+        assert modules.get_modules == environ.get_modules
+        assert modules.get_versions == environ.get_versions
 
     def test_namespace_functions(self):
         assert namespace_manager.get_namespace == environ.get_namespace
