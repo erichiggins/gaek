@@ -1,3 +1,8 @@
+0.2.1
+=====
+- Patch version in order to replace uploaded sdist files on PyPi.
+
+
 0.2.0
 ====
 - Added the `environ` module.
