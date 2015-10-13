@@ -55,3 +55,9 @@ docs/_build/
 
 # Autoenv
 .env
+
+# GAE
+google
+google/
+google_appengine/
+google_appengine_*.zip

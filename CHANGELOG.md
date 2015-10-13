@@ -1,3 +1,8 @@
+0.2.0
+====
+- Added the `environ` module.
+
+
 0.1.2
 =====
 - Actually fix the MANIFEST.in contents.
