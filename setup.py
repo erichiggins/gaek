@@ -27,6 +27,11 @@ def requirements():
     return fp.read()
 
 
+def test_requirements():
+  with open('requirements_test.txt') as fp:
+    return fp.read()
+
+
 setup(
     name='gaek',
     version=version(),
@@ -40,4 +45,5 @@ setup(
     include_package_data=True,
     install_requires=requirements(),
     test_suite='nose.collector',
+    tests_require=test_requirements(),
     zip_safe=False)
