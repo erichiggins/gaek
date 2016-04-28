@@ -41,7 +41,7 @@ setup(
     author_email='erichiggins@gmail.com',
     url='https://github.com/erichiggins/gaek',
     license="BSD",
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=['tests', 'google']),
     include_package_data=True,
     install_requires=requirements(),
     test_suite='nose.collector',
