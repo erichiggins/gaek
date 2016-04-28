@@ -1,18 +1,18 @@
+sudo: false
 language: python
 python:
   - "2.7"
   - "pypy"
 
+before_install:
+- ./setup.sh
+- source .dev_env/bin/activate
+
 # command to install dependencies
 install:
+  - pip install --upgrade setuptools
   - pip install .
   - pip install -r requirements.txt
-
-# environment dependencies
-before_script:
-  - curl -O https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.27.zip
-  - unzip -q google_appengine_1.9.27.zip
-  - ln -s google_appengine/google google
 
 # command to run tests
 script:
