@@ -1,3 +1,9 @@
+0.2.2
+=====
+- Build and file clean-ups.
+- Configure Travis CI to auto-deploy to PyPi.
+
+
 0.2.1
 =====
 - Patch version in order to replace uploaded sdist files on PyPi.
