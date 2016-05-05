@@ -3,23 +3,25 @@
 Environment discovery and helper functions for Google App Engine.
 Some methods from the following modules have been made available for convenience:
 
-* [`google.appengine.api.app_identity`](https://cloud.google.com/appengine/docs/python/appidentity/)
-* [`google.appengine.api.modules`](https://cloud.google.com/appengine/docs/python/modules/)
-* [`google.appengine.api.namespace_manager`](https://cloud.google.com/appengine/docs/python/multitenancy/)
+* google.appengine.api.app_identity
+  https://cloud.google.com/appengine/docs/python/appidentity/
+* google.appengine.api.modules
+  https://cloud.google.com/appengine/docs/python/modules/
+* google.appengine.api.namespace_manager
+  https://cloud.google.com/appengine/docs/python/multitenancy/
 
 Example:
 
-  import environ
+  import gaek.environ
 
   # Only send emails in production.
-  if environ.is_production():
+  if gaek.environ.is_production():
     mail.send(*args, **kwargs)
   
 """
  
 __author__ = 'Eric Higgins'
 __copyright__ = 'Copyright 2015, Eric Higgins'
-__version__ = '0.0.1'
 __email__ = 'erichiggins@gmail.com'
 
 
@@ -92,7 +94,7 @@ def is_host_google():
 def is_default_version(version=None):
   """True if the current or specified app version is the default."""
   version = version or get_current_version_name()
-  return get_current_version_name() == get_default_version()
+  return version == get_default_version()
 
 
 def is_development():
