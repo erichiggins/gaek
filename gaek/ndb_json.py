@@ -28,7 +28,6 @@ Dependencies:
  
 __author__ = 'Eric Higgins'
 __copyright__ = 'Copyright 2013, Eric Higgins'
-__version__ = '0.0.5'
 __email__ = 'erichiggins@gmail.com'
 
 
