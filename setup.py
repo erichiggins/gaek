@@ -44,6 +44,6 @@ setup(
     packages=find_packages(exclude=['tests', 'google']),
     include_package_data=True,
     install_requires=requirements(),
-    test_suite='nose.collector',
+    test_suite='tests',
     tests_require=test_requirements(),
     zip_safe=False)
