@@ -118,6 +118,9 @@ NDB_TYPE_ENCODING = {
   ndb.model._BaseValue: encode_basevalue,
 }
 
+# Sort the types so any iteration is in a deterministic order
+NDB_TYPES = sorted(NDB_TYPE_ENCODING.keys(), key=lambda t: t.__name__)
+
 
 class NdbEncoder(json.JSONEncoder):
   """Extend the JSON encoder to add support for NDB Models."""
@@ -132,7 +135,7 @@ class NdbEncoder(json.JSONEncoder):
         obj_type = obj.__metaclass__
       else:
         # Try to encode subclasses of types
-        for ndb_type in NDB_TYPE_ENCODING.keys():
+        for ndb_type in NDB_TYPES:
           if isinstance(obj, ndb_type):
             obj_type = ndb_type
             break
