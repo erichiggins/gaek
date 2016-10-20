@@ -55,6 +55,15 @@ class TestNdbJson(unittest.TestCase):
         json_fp.close()
         ndb_json_fp.close()
 
+    def test_dumps_with_subclassed_type(self):
+        """ Assert that a subclass of a supported type will encode as JSON properly """
+        class MyDateTime(datetime.datetime):
+            pass
+
+        subclass_parsed = ndb_json.dumps({'a datetime': MyDateTime(2015, 10, 1)})
+        original_parsed = ndb_json.dumps({'a datetime': datetime.datetime(2015, 10, 1)})
+        assert subclass_parsed == original_parsed
+
     def test_loads_with_naive_values(self):
         payload_str = json.dumps({
             'bool true': True,
