@@ -116,8 +116,10 @@ NDB_TYPE_ENCODING = {
   time.struct_time: encode_generator,
   types.ComplexType: encode_complex,
   ndb.model._BaseValue: encode_basevalue,
-  
 }
+
+# Sort the types so any iteration is in a deterministic order
+NDB_TYPES = sorted(NDB_TYPE_ENCODING.keys(), key=lambda t: t.__name__)
 
 
 class NdbEncoder(json.JSONEncoder):
@@ -128,8 +130,16 @@ class NdbEncoder(json.JSONEncoder):
 
     obj_type = type(obj)
     # NDB Models return a repr to calls from type().
-    if obj_type not in NDB_TYPE_ENCODING and hasattr(obj, '__metaclass__'):
-      obj_type = obj.__metaclass__
+    if obj_type not in NDB_TYPE_ENCODING:
+      if hasattr(obj, '__metaclass__'):
+        obj_type = obj.__metaclass__
+      else:
+        # Try to encode subclasses of types
+        for ndb_type in NDB_TYPES:
+          if isinstance(obj, ndb_type):
+            obj_type = ndb_type
+            break
+
     fn = NDB_TYPE_ENCODING.get(obj_type)
     if fn:
       return fn(obj)
