@@ -67,14 +67,25 @@ def encode_generator(obj):
   return list(obj)
 
 
-def encode_key(obj):
+def encode_key_as_entity(obj):
   """Get the Entity from the ndb.Key for further encoding."""
   # NOTE(erichiggins): Potentially poor performance for Models w/ many KeyProperty properties.
+  # NOTE(ronufryk): Potentially can cause circular references and "RuntimeError: maximum recursion depth exceeded"
   return obj.get_async()
-  # Alternative 1: Convert into pairs.
-  # return obj.pairs()
-  # Alternative 2: Convert into URL-safe base64-encoded string.
-  # return obj.urlsafe()
+
+
+# Alias for backward-compatibility
+encode_key = encode_key_as_entity
+
+
+def encode_key_as_pair(obj):
+  """Get the ndb.Key as a tuple of (kind, id) pairs."""
+  return obj.pairs()
+
+
+def encode_key_as_urlsafe(obj):
+  """Get the ndb.Key as URL-safe base64-encoded string."""
+  return obj.urlsafe()
 
 
 def encode_future(obj):
@@ -109,7 +120,7 @@ NDB_TYPE_ENCODING = {
   ndb.MetaModel: encode_model,
   ndb.Query: encode_generator,
   ndb.QueryIterator: encode_generator,
-  ndb.Key: encode_key,
+  ndb.Key: encode_key_as_entity,
   ndb.Future: encode_future,
   datetime.date: encode_datetime,
   datetime.datetime: encode_datetime,
@@ -125,12 +136,36 @@ NDB_TYPES = sorted(NDB_TYPE_ENCODING.keys(), key=lambda t: t.__name__)
 class NdbEncoder(json.JSONEncoder):
   """Extend the JSON encoder to add support for NDB Models."""
 
+
+  def __init__(self, **kwargs):
+    self._ndb_type_encoding = NDB_TYPE_ENCODING.copy()
+
+    keys_as_entities = kwargs.pop('ndb_keys_as_entities', False)
+    keys_as_pairs = kwargs.pop('ndb_keys_as_pairs', False)
+    keys_as_urlsafe = kwargs.pop('ndb_keys_as_urlsafe', False)
+
+    # Validate that only one of three flags is True
+    if ((keys_as_entities and keys_as_pairs)
+        or (keys_as_entities and keys_as_urlsafe)
+        or (keys_as_pairs and keys_as_urlsafe)):
+      raise ValueError('Only one of arguments ndb_keys_as_entities, ndb_keys_as_pairs, ndb_keys_as_urlsafe can be True')
+
+    if keys_as_pairs:
+      self._ndb_type_encoding[ndb.Key] = encode_key_as_pair
+    elif keys_as_urlsafe:
+      self._ndb_type_encoding[ndb.Key] = encode_key_as_urlsafe
+    else:
+      self._ndb_type_encoding[ndb.Key] = encode_key_as_entity
+
+
+    json.JSONEncoder.__init__(self, **kwargs)
+
   def default(self, obj):
     """Overriding the default JSONEncoder.default for NDB support."""
 
     obj_type = type(obj)
     # NDB Models return a repr to calls from type().
-    if obj_type not in NDB_TYPE_ENCODING:
+    if obj_type not in self._ndb_type_encoding:
       if hasattr(obj, '__metaclass__'):
         obj_type = obj.__metaclass__
       else:
@@ -140,7 +175,8 @@ class NdbEncoder(json.JSONEncoder):
             obj_type = ndb_type
             break
 
-    fn = NDB_TYPE_ENCODING.get(obj_type)
+    fn = self._ndb_type_encoding.get(obj_type)
+
     if fn:
       return fn(obj)
 

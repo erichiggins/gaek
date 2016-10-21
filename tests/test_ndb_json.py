@@ -9,8 +9,11 @@ Tests for `gaek` module.
 
 import datetime
 import json
+import mock
 import unittest
 import cStringIO
+
+from google.appengine.ext import ndb
 
 from gaek import ndb_json
 
@@ -18,10 +21,17 @@ from gaek import ndb_json
 class TestNdbJson(unittest.TestCase):
 
     def setUp(self):
-        pass
+      self.ndb_mock = mock.Mock()
+      self.ndb_mock.__metaclass__ = ndb.Key
+      self.ndb_mock.urlsafe = mock.Mock(return_value='urlsafe')
+      self.ndb_mock.pairs = mock.Mock(return_value='pairs')
+      self.ndb_mock.get_async = mock.Mock(return_value='get_async')
+      pass
 
     def tearDown(self):
         pass
+
+
 
     def test_dumps_with_ndb_values(self):
         """Assert functional with NDB datastore values."""
@@ -107,6 +117,93 @@ class TestNdbJson(unittest.TestCase):
         assert '12:30' == parsed['time']
         assert '12-15' == parsed['non-date']
         assert '12-15-0' == parsed['double-hyphen non-date']
+
+    def test_invalid_arguments(self):
+      self.assertRaises(ValueError,
+                        ndb_json.NdbEncoder,
+                        ndb_keys_as_entities=True,
+                        ndb_keys_as_pairs=True,
+                        ndb_keys_as_urlsafe=True)
+      self.assertRaises(ValueError,
+                        ndb_json.NdbEncoder,
+                        ndb_keys_as_entities=False,
+                        ndb_keys_as_pairs=True,
+                        ndb_keys_as_urlsafe=True)
+      self.assertRaises(ValueError,
+                        ndb_json.NdbEncoder,
+                        ndb_keys_as_entities=True,
+                        ndb_keys_as_pairs=False,
+                        ndb_keys_as_urlsafe=True)
+      self.assertRaises(ValueError,
+                        ndb_json.NdbEncoder,
+                        ndb_keys_as_entities=True,
+                        ndb_keys_as_pairs=True,
+                        ndb_keys_as_urlsafe=False)
+
+    def test_encode_key(self):
+      some_obj = mock.Mock()
+      ndb_json.encode_key(some_obj)
+      self.assertEqual(1, some_obj.get_async.call_count)
+
+    def test_encode_key_as_entity(self):
+      some_obj = mock.Mock()
+      ndb_json.encode_key_as_entity(some_obj)
+      self.assertEqual(1, some_obj.get_async.call_count)
+
+    def test_encode_key_as_pair(self):
+      some_obj = mock.Mock()
+      ndb_json.encode_key_as_pair(some_obj)
+      self.assertEqual(1, some_obj.pairs.call_count)
+
+    def test_encode_key_as_urlsafe(self):
+      some_obj = mock.Mock()
+      ndb_json.encode_key_as_urlsafe(some_obj)
+      self.assertEqual(1, some_obj.urlsafe.call_count)
+
+    def test_dumps__no_option_specified(self):
+      obj = {
+        "number": 1,
+        "string": "is here",
+        "key": self.ndb_mock
+      }
+
+      dump = ndb_json.dumps(obj, sort_keys=True)
+      self.assertEqual('{"key": "get_async", "number": 1, "string": "is here"}', dump)
+
+    def test_dumps__ndb_keys_as_entities(self):
+
+      obj = {
+        "number": 1,
+        "string": "is here",
+        "key": self.ndb_mock
+      }
+
+      dump = ndb_json.dumps(obj, sort_keys=True, ndb_keys_as_entities=True)
+      self.assertEqual('{"key": "get_async", "number": 1, "string": "is here"}', dump)
+
+    def test_dumps__ndb_keys_as_pairs(self):
+
+      obj = {
+        "number": 1,
+        "string": "is here",
+        "key": self.ndb_mock
+      }
+
+      dump = ndb_json.dumps(obj, sort_keys=True, ndb_keys_as_pairs=True)
+      self.assertEqual('{"key": "pairs", "number": 1, "string": "is here"}', dump)
+
+    def test_dumps__ndb_keys_as_urlsafe(self):
+
+      obj = {
+        "number": 1,
+        "string": "is here",
+        "key": self.ndb_mock
+      }
+
+      dump = ndb_json.dumps(obj, sort_keys=True, ndb_keys_as_urlsafe=True)
+      self.assertEqual('{"key": "urlsafe", "number": 1, "string": "is here"}', dump)
+
+
 
 
 if __name__ == '__main__':
