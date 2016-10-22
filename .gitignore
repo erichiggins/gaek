@@ -55,6 +55,7 @@ docs/_build/
 
 # Autoenv
 .env
+.dev_env
 
 # GAE
 google
