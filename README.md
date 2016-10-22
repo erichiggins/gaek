@@ -22,6 +22,69 @@ Usage:
     # Parse a JSON string into a Python dictionary.
     ndb_json.loads(json_str)
 
+When the encoder meets a property of the `ndb.Key` type, 
+there are three encoding options available:   
+
+* `ndb_keys_as_entities` - encode Key property as a `Future` whose eventual result is the entity for the key.
+ This is the default option.
+* `ndb_keys_as_pairs` - encode Key property as a tuple of (kind, id) pairs.
+* `ndb_keys_as_urlsafe` - encode Key property as a websafe-base64-encoded serialized version of the key.
+
+Please refer to [NDB Key Class](https://cloud.google.com/appengine/docs/python/ndb/keyclass) documentation for details.
+
+For example, for the following data models:
+
+```
+    class Master(ndb.Model):
+      name = ndb.StringProperty()
+```
+```
+    class Details(ndb.Model):
+      master = ndb.KeyProperty()
+      description = ndb.StringProperty()
+```
+
+and following records:
+
+```
+    master = Master(id=123456L, name='Europe')
+    details = Details(
+      master=ndb.Key(Master, 123456L), 
+      description='List of European customers'
+     )
+```
+
+The calls
+```
+    json_str = ndb_json.dumps(details)
+    json_str = ndb_json.dumps(details, ndb_keys_as_entities=True)
+```
+will return
+
+```
+{"master": {"name": "Europe"}, "description": "List of European customers"}
+```
+
+The call
+```
+    json_str = ndb_json.dumps(details, ndb_keys_as_pairs=True)
+```
+will return
+
+```
+{"master": [["Master", 123456]], "description": "List of European customers"}
+```
+
+The call
+```
+    json_str = ndb_json.dumps(details, ndb_keys_as_urlsafe=True)
+```
+will return
+
+```
+{"master": "agFfcg4LEgZNYXN0ZXIYwMQHDA", "description": "List of European customers"}
+```
+
 
 Feature parity with the Python `json` module functions.
 
