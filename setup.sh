@@ -9,6 +9,7 @@ virtualenv .dev_env
 source .dev_env/bin/activate
 pip install --upgrade ndg-httpsclient
 pip install --upgrade pip
+pip install --upgrade nose
 
 # Download the App Engine SDK.
 echo "Downloading $GAE_SDK_FILE..."
