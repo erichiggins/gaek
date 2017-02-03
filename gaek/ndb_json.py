@@ -52,7 +52,7 @@ __all__ = (
 )
 
 
-DATE_RE = re.compile(r'\d{4}[-/]\d{2}[-/]\d{2}')
+DATE_RE = re.compile(r'^\d{4}[-/]\d{2}[-/]\d{2}')
 
 
 def encode_model(obj):
