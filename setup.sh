@@ -1,7 +1,7 @@
 #!/bin/bash
 
-GAE_SDK_SHA1='abe54d95c4ce6ffc35452e027ca701f5d21dd56a'
-GAE_SDK_FILE='google_appengine_1.9.35.zip'
+GAE_SDK_SHA1='02ca467d77f5681c52741c7223fb8e97dff999da'
+GAE_SDK_FILE='google_appengine_1.9.50.zip'
 
 # Create virtual environment.
 echo 'Creating virtual environment...'
