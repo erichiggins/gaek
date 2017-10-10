@@ -7,6 +7,7 @@ test_environ
 Tests for `environ` module.
 """
 
+import mock
 import os
 import unittest
 
@@ -75,6 +76,11 @@ class TestEnviron(unittest.TestCase):
 
     def test_is_default_version(self):
         val = environ.is_default_version()
+        assert val == False, repr(val)
+
+    def test_is_default_version__when_current_version_is_none(self):
+        with mock.patch('gaek.environ.get_current_version_name', return_value=None):
+            val = environ.is_default_version()
         assert val == False, repr(val)
 
     def test_get_current_version_name(self):
