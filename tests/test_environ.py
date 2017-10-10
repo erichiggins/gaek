@@ -40,7 +40,6 @@ class TestEnviron(unittest.TestCase):
     def test_modules_functions(self):
         assert modules.get_current_instance_id == environ.get_current_instance_id
         assert modules.get_current_module_name == environ.get_current_module_name
-        assert modules.get_current_version_name == environ.get_current_version_name
         assert modules.get_default_version == environ.get_default_version
         assert modules.get_hostname == environ.get_hostname
         assert modules.get_modules == environ.get_modules
@@ -77,6 +76,29 @@ class TestEnviron(unittest.TestCase):
     def test_is_default_version(self):
         val = environ.is_default_version()
         assert val == False, repr(val)
+
+    def test_get_current_version_name(self):
+        version_name = environ.get_current_version_name()
+        assert 'testbed-version' == version_name
+
+    def test_get_current_version_name__returns_none_when_no_version(self):
+        """
+        Test that environ.get_current_version_name returns None when there
+        is no version, rather than raising an error.
+        """
+        # The version is stored in an environment variable 'CURRENT_VERSION_ID'.
+        #  If that variable isn't present then an error will be raised unless we catch it.
+        saved_version = os.environ.pop('CURRENT_VERSION_ID', None)
+
+        version = 'v1'
+        try:
+            version = environ.get_current_version_name()
+        except Exception as err:
+            self.fail('Unexpected exception when getting current version: {}'.format(
+                err.message))
+        assert version is None
+
+        os.environ['CURRENT_VERSION_ID'] = saved_version
 
 
 if __name__ == '__main__':

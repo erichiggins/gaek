@@ -71,7 +71,6 @@ get_service_account_name = app_identity.get_service_account_name
 # Module functions.
 get_current_instance_id = modules.get_current_instance_id
 get_current_module_name = modules.get_current_module_name
-get_current_version_name = modules.get_current_version_name
 get_default_version = modules.get_default_version
 get_hostname = modules.get_hostname
 get_modules = modules.get_modules
@@ -84,6 +83,14 @@ google_apps_namespace = namespace_manager.google_apps_namespace
 
 
 # Helper functions.
+
+
+def get_current_version_name():
+  """Returns the current version of app, or None."""
+  try:
+    return modules.get_current_version_name()
+  except KeyError:
+    return None
 
 
 def is_host_google():
