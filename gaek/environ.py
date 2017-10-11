@@ -70,7 +70,6 @@ get_service_account_name = app_identity.get_service_account_name
 
 # Module functions.
 get_current_instance_id = modules.get_current_instance_id
-get_current_module_name = modules.get_current_module_name
 get_default_version = modules.get_default_version
 get_hostname = modules.get_hostname
 get_modules = modules.get_modules
@@ -89,6 +88,14 @@ def get_current_version_name():
   """Returns the current version of app, or None."""
   try:
     return modules.get_current_version_name()
+  except KeyError:
+    return None
+
+
+def get_current_module_name():
+  """Returns the current module of the app, or None."""
+  try:
+    return modules.get_current_module_name()
   except KeyError:
     return None
 
@@ -120,10 +127,15 @@ def is_production(version=None):
 
 
 def get_dot_target_name(version=None, module=None):
-  """Returns the current version/module in -dot- notation which is used by `target:` parameters."""
+  """
+  Returns the current version/module in -dot- notation which is used by `target:` parameters.
+  If there is no current version or module then None is returned.
+  """
   version = version or get_current_version_name()
   module = module or get_current_module_name()
-  return '-dot-'.join((version, module))
+  if version and module:
+    return '-dot-'.join((version, module))
+  return None
 
 
 def _get_os_environ_dict(keys):

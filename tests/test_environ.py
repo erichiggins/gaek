@@ -40,7 +40,6 @@ class TestEnviron(unittest.TestCase):
 
     def test_modules_functions(self):
         assert modules.get_current_instance_id == environ.get_current_instance_id
-        assert modules.get_current_module_name == environ.get_current_module_name
         assert modules.get_default_version == environ.get_default_version
         assert modules.get_hostname == environ.get_hostname
         assert modules.get_modules == environ.get_modules
@@ -57,6 +56,12 @@ class TestEnviron(unittest.TestCase):
     def test_get_dot_target_name(self):
         val = environ.get_dot_target_name()
         assert val == 'testbed-version-dot-default', repr(val)
+
+    def test_get_dot_target_name__returns_none_when_no_version_or_module(self):
+        with mock.patch('gaek.environ.get_current_version_name', return_value=None):
+            assert environ.get_dot_target_name() is None
+        with mock.patch('gaek.environ.get_current_module_name', return_value=None):
+            assert environ.get_dot_target_name() is None
 
     def test_is_host_google(self):
         val = environ.is_host_google()
@@ -105,6 +110,24 @@ class TestEnviron(unittest.TestCase):
         assert version is None
 
         os.environ['CURRENT_VERSION_ID'] = saved_version
+
+    def test_get_current_module_name__returns_none_when_no_module(self):
+        """
+        Test that environ.get_current_module_name returns None when there is no
+        current module, rather than raising an error.
+        """
+        # The current module is stored in an environment variable 'CURRENT_MODULE_ID'.
+        saved_module_name = os.environ.pop('CURRENT_MODULE_ID', None)
+
+        current_module = 'v1-app'
+        try:
+            current_module = environ.get_current_module_name()
+        except Exception as err:
+            self.fail('Unexpected exception when getting current module: {}'.format(
+                err.message))
+        assert current_module is None
+
+        os.environ['CURRENT_MODULE_ID'] = saved_module_name
 
 
 if __name__ == '__main__':
