@@ -83,20 +83,20 @@ class TestEnviron(unittest.TestCase):
 
     def test_is_staging_safe(self):
         with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
-            val = environ.is_staging()
-            assert val is None, repr(val)
-        val = environ.is_staging()
+            val = environ.is_staging_safe()
+            assert val is False, repr(val)
+        val = environ.is_staging_safe()
         assert val == False, repr(val)
 
     def test_is_production(self):
         val = environ.is_production()
         assert val == False, repr(val)
 
-    def test_is_staging_safe(self):
+    def test_is_production_safe(self):
         with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
-            val = environ.is_productionj()
-            assert val is None, repr(val)
-        val = environ.is_production()
+            val = environ.is_production_safe()
+            assert val is False, repr(val)
+        val = environ.is_production_safe()
         assert val == False, repr(val)
 
     def test_is_default_version(self):
@@ -105,12 +105,8 @@ class TestEnviron(unittest.TestCase):
 
     def test_is_default_version_safe(self):
         with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
-            val = environ.is_default_version()
+            val = environ.is_default_version_safe()
         assert val == False, repr(val)
-
-    def test_get_current_version_name(self):
-        version_name = environ.get_current_version_name()
-        assert 'testbed-version' == version_name
 
     def test_get_current_version_name_safe(self):
         # The version is stored in an environment variable 'CURRENT_VERSION_ID'.

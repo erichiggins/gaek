@@ -140,8 +140,8 @@ def is_staging_safe(version=None):
   """True if the app is hosted by Google (appspot.com) but the version is not the default."""
   is_default_version = is_default_version_safe()
   if is_default_version is None:
-    return None
-  return is_host_google() and not is_default_version_safe(version)
+    return False
+  return is_host_google() and not is_default_version
 
 
 def is_production(version=None):
@@ -153,14 +153,12 @@ def is_production_safe(version=None):
   """True if the app is being hosted by Google and the default version."""
   is_default_version = is_default_version_safe(version)
   if is_default_version is None:
-    return None
+    return False
   return is_host_google() and is_default_version
 
 
 def get_dot_target_name(version=None, module=None):
-  """
-  Returns the current version/module in -dot- notation which is used by `target:` parameters.
-  """
+  """Returns the current version/module in -dot- notation which is used by `target:` parameters."""
   version = version or get_current_version_name()
   module = module or get_current_module_name()
   return '-dot-'.join((version, module))
