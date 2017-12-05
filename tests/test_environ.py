@@ -40,6 +40,8 @@ class TestEnviron(unittest.TestCase):
 
     def test_modules_functions(self):
         assert modules.get_current_instance_id == environ.get_current_instance_id
+        assert modules.get_current_module_name == environ.get_current_module_name
+        assert modules.get_current_version_name == environ.get_current_version_name
         assert modules.get_default_version == environ.get_default_version
         assert modules.get_hostname == environ.get_hostname
         assert modules.get_modules == environ.get_modules
@@ -57,11 +59,15 @@ class TestEnviron(unittest.TestCase):
         val = environ.get_dot_target_name()
         assert val == 'testbed-version-dot-default', repr(val)
 
-    def test_get_dot_target_name__returns_none_when_no_version_or_module(self):
-        with mock.patch('gaek.environ.get_current_version_name', return_value=None):
-            assert environ.get_dot_target_name() is None
-        with mock.patch('gaek.environ.get_current_module_name', return_value=None):
-            assert environ.get_dot_target_name() is None
+    def test_get_dot_target_name_safe(self):
+        with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
+            val = environ.get_dot_target_name_safe()
+            assert val is None, val
+        with mock.patch('gaek.environ.get_current_module_name_safe', return_value=None):
+            val = environ.get_dot_target_name_safe()
+            assert val is None, val
+        val = environ.get_dot_target_name_safe()
+        assert val == 'testbed-version-dot-default', repr(val)
 
     def test_is_host_google(self):
         val = environ.is_host_google()
@@ -75,7 +81,21 @@ class TestEnviron(unittest.TestCase):
         val = environ.is_staging()
         assert val == False, repr(val)
 
+    def test_is_staging_safe(self):
+        with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
+            val = environ.is_staging()
+            assert val is None, repr(val)
+        val = environ.is_staging()
+        assert val == False, repr(val)
+
     def test_is_production(self):
+        val = environ.is_production()
+        assert val == False, repr(val)
+
+    def test_is_staging_safe(self):
+        with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
+            val = environ.is_productionj()
+            assert val is None, repr(val)
         val = environ.is_production()
         assert val == False, repr(val)
 
@@ -83,8 +103,8 @@ class TestEnviron(unittest.TestCase):
         val = environ.is_default_version()
         assert val == False, repr(val)
 
-    def test_is_default_version__when_current_version_is_none(self):
-        with mock.patch('gaek.environ.get_current_version_name', return_value=None):
+    def test_is_default_version_safe(self):
+        with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
             val = environ.is_default_version()
         assert val == False, repr(val)
 
@@ -92,18 +112,14 @@ class TestEnviron(unittest.TestCase):
         version_name = environ.get_current_version_name()
         assert 'testbed-version' == version_name
 
-    def test_get_current_version_name__returns_none_when_no_version(self):
-        """
-        Test that environ.get_current_version_name returns None when there
-        is no version, rather than raising an error.
-        """
+    def test_get_current_version_name_safe(self):
         # The version is stored in an environment variable 'CURRENT_VERSION_ID'.
         #  If that variable isn't present then an error will be raised unless we catch it.
         saved_version = os.environ.pop('CURRENT_VERSION_ID', None)
 
         version = 'v1'
         try:
-            version = environ.get_current_version_name()
+            version = environ.get_current_version_name_safe()
         except Exception as err:
             self.fail('Unexpected exception when getting current version: {}'.format(
                 err.message))
@@ -111,7 +127,11 @@ class TestEnviron(unittest.TestCase):
 
         os.environ['CURRENT_VERSION_ID'] = saved_version
 
-    def test_get_current_module_name__returns_none_when_no_module(self):
+        # Now the environment variable is back.
+        version = environ.get_current_version_name_safe()
+        assert 'testbed-version' == version, version
+
+    def test_get_current_module_name_safe(self):
         """
         Test that environ.get_current_module_name returns None when there is no
         current module, rather than raising an error.
@@ -121,13 +141,16 @@ class TestEnviron(unittest.TestCase):
 
         current_module = 'v1-app'
         try:
-            current_module = environ.get_current_module_name()
+            current_module = environ.get_current_module_name_safe()
         except Exception as err:
             self.fail('Unexpected exception when getting current module: {}'.format(
                 err.message))
         assert current_module is None
 
         os.environ['CURRENT_MODULE_ID'] = saved_module_name
+        # Now the environment variable is back.
+        current_module = environ.get_current_module_name_safe()
+        assert 'default' == current_module, current_module
 
 
 if __name__ == '__main__':
