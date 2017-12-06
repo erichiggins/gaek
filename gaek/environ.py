@@ -61,7 +61,7 @@ __all__ = (
     'is_default_version',
     'is_default_version_safe',
     'get_current_module_name_safe',
-    'get_current_version_name_safes'
+    'get_current_version_name_safe'
 )
 
 
