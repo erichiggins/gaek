@@ -32,8 +32,6 @@ class TestNdbJson(unittest.TestCase):
     def tearDown(self):
         pass
 
-
-
     def test_dumps_with_ndb_values(self):
         """Assert functional with NDB datastore values."""
         pass
