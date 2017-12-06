@@ -14,6 +14,7 @@ import unittest
 import cStringIO
 
 from google.appengine.ext import ndb
+from nose import tools
 
 from gaek import ndb_json
 
@@ -101,6 +102,8 @@ class TestNdbJson(unittest.TestCase):
 
     def test_loads_with_date_and_time_values(self):
         """Assert that date/time-like strings are parsed properly."""
+        assert datetime.datetime(2015, 1, 1) == ndb_json.loads(datetime.date(2015, 1, 1).isoformat())
+
         payload_str = json.dumps({
             'date': datetime.date(2015, 1, 1).isoformat(),
             'datetime': datetime.datetime(2015, 1, 1, 12, 0, 0, 0).isoformat(),
@@ -117,6 +120,14 @@ class TestNdbJson(unittest.TestCase):
         assert '12:30' == parsed['time']
         assert '12-15' == parsed['non-date']
         assert '12-15-0' == parsed['double-hyphen non-date']
+
+    def test_loads_with_nested_datetime(self):
+        """Assert the object hooks work as intended."""
+        payload_str = json.dumps({
+          'nested': {'datetime': datetime.datetime(2016, 1, 1, 12).isoformat()},
+        })
+        parsed = ndb_json.loads(payload_str)
+        assert datetime.datetime(2016, 1, 1, 12, 0, 0, 0) == parsed['nested']['datetime']
 
     def test_invalid_arguments(self):
       self.assertRaises(ValueError,
@@ -203,7 +214,17 @@ class TestNdbJson(unittest.TestCase):
       dump = ndb_json.dumps(obj, sort_keys=True, ndb_keys_as_urlsafe=True)
       self.assertEqual('{"key": "urlsafe", "number": 1, "string": "is here"}', dump)
 
+    def test_loads_with_primitive_values(self):
+        """Assert that primitive values are parsed properly."""
+        test_cases = ['null', '2', 'Infinity', '1.2345']
+        for s in test_cases:
+            tools.eq_(json.loads(s), ndb_json.loads(s))
 
+    def test_loads_with_other_collections(self):
+        """Assert that array/list values are parsed properly."""
+        test_cases = ['[1,2,3,4]', '[[0]]', '[[[{}]]]']
+        for s in test_cases:
+            tools.eq_(json.loads(s), ndb_json.loads(s))
 
 
 if __name__ == '__main__':

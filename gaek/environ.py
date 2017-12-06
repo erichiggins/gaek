@@ -21,7 +21,7 @@ Example:
 """
  
 __author__ = 'Eric Higgins'
-__copyright__ = 'Copyright 2015, Eric Higgins'
+__copyright__ = 'Copyright 2015-2016, Eric Higgins'
 __email__ = 'erichiggins@gmail.com'
 
 
