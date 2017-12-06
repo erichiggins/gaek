@@ -100,6 +100,10 @@ Environment module
 
    Returns the current version/module in `-dot-` notation which is used by `target:` parameters.
 
+* `environ.get_dot_target_name_safe(version=None, module=None)`
+
+   Same as `environ.get_dot_target_name`, but this function returns `None` if there is no version or module found.
+
 * `environ.get_environ_dict()`
 
    Return a dictionary of all environment keys/values.
@@ -116,12 +120,30 @@ Environment module
 
    True if the app is hosted by Google (appspot.com) but the version is not the default.
 
+* `environ.is_staging_safe(version=None)`
+
+   Same as `environ.is_staging`, but returns `None` if there is no version found.
+
 * `environ.is_production(version=None)`
 
    True if the app is being hosted by Google and the default version.
+
+* `environ.is_production_safe(version=None)`
+
+   Same as `environ.is_production`, but returns `None` if there is no version found.
 
 * `environ.is_default_version(version=None)`
 
    True if the current or specified app version is the default.
 
+* `environ.is_default_version_safe(version=None)`
 
+   Same as `environ.is_default_version`, but returns `None` if there is no version found.
+
+* `environ.get_current_version_name_safe()`
+
+   Wrapper around `google.appengine.api.modules.get_current_version_name`.  Returns `None` if there is any error raised, otherwise it returns the current version name.
+
+* `environ.get_current_module_name_safe()`
+
+   Wrapper around `google.appengine.api.modules.get_current_module_name`.  Returns `None` if there is any error raised, otherwise it returns the current version name.
