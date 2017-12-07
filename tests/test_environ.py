@@ -7,6 +7,7 @@ test_environ
 Tests for `environ` module.
 """
 
+import mock
 import os
 import unittest
 
@@ -58,6 +59,16 @@ class TestEnviron(unittest.TestCase):
         val = environ.get_dot_target_name()
         assert val == 'testbed-version-dot-default', repr(val)
 
+    def test_get_dot_target_name_safe(self):
+        with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
+            val = environ.get_dot_target_name_safe()
+            assert val is None, val
+        with mock.patch('gaek.environ.get_current_module_name_safe', return_value=None):
+            val = environ.get_dot_target_name_safe()
+            assert val is None, val
+        val = environ.get_dot_target_name_safe()
+        assert val == 'testbed-version-dot-default', repr(val)
+
     def test_is_host_google(self):
         val = environ.is_host_google()
         assert val == False, repr(val)
@@ -70,13 +81,72 @@ class TestEnviron(unittest.TestCase):
         val = environ.is_staging()
         assert val == False, repr(val)
 
+    def test_is_staging_safe(self):
+        with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
+            val = environ.is_staging_safe()
+            assert val is False, repr(val)
+        val = environ.is_staging_safe()
+        assert val == False, repr(val)
+
     def test_is_production(self):
         val = environ.is_production()
+        assert val == False, repr(val)
+
+    def test_is_production_safe(self):
+        with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
+            val = environ.is_production_safe()
+            assert val is False, repr(val)
+        val = environ.is_production_safe()
         assert val == False, repr(val)
 
     def test_is_default_version(self):
         val = environ.is_default_version()
         assert val == False, repr(val)
+
+    def test_is_default_version_safe(self):
+        with mock.patch('gaek.environ.get_current_version_name_safe', return_value=None):
+            val = environ.is_default_version_safe()
+        assert val == False, repr(val)
+
+    def test_get_current_version_name_safe(self):
+        # The version is stored in an environment variable 'CURRENT_VERSION_ID'.
+        #  If that variable isn't present then an error will be raised unless we catch it.
+        saved_version = os.environ.pop('CURRENT_VERSION_ID', None)
+
+        version = 'v1'
+        try:
+            version = environ.get_current_version_name_safe()
+        except Exception as err:
+            self.fail('Unexpected exception when getting current version: {}'.format(
+                err.message))
+        assert version is None
+
+        os.environ['CURRENT_VERSION_ID'] = saved_version
+
+        # Now the environment variable is back.
+        version = environ.get_current_version_name_safe()
+        assert 'testbed-version' == version, version
+
+    def test_get_current_module_name_safe(self):
+        """
+        Test that environ.get_current_module_name returns None when there is no
+        current module, rather than raising an error.
+        """
+        # The current module is stored in an environment variable 'CURRENT_MODULE_ID'.
+        saved_module_name = os.environ.pop('CURRENT_MODULE_ID', None)
+
+        current_module = 'v1-app'
+        try:
+            current_module = environ.get_current_module_name_safe()
+        except Exception as err:
+            self.fail('Unexpected exception when getting current module: {}'.format(
+                err.message))
+        assert current_module is None
+
+        os.environ['CURRENT_MODULE_ID'] = saved_module_name
+        # Now the environment variable is back.
+        current_module = environ.get_current_module_name_safe()
+        assert 'default' == current_module, current_module
 
 
 if __name__ == '__main__':
