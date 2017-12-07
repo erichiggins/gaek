@@ -1,3 +1,7 @@
+0.4.0
+=====
+- Added `_safe` methods for functions which break outside of the GAE environment.
+
 0.3.0
 =====
 - Added support for encoding `ndb.Key` objects as entities, pairs, or urlsafe-strings.

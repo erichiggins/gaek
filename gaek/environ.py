@@ -50,12 +50,18 @@ __all__ = (
     'google_apps_namespace',
     # Helper functions.
     'get_dot_target_name',
+    'get_dot_target_name_safe',
     'get_environ_dict',
     'is_host_google',
     'is_development',
     'is_staging',
+    'is_staging_safe',
     'is_production',
+    'is_production_safe',
     'is_default_version',
+    'is_default_version_safe',
+    'get_current_module_name_safe',
+    'get_current_version_name_safe'
 )
 
 
@@ -84,6 +90,20 @@ google_apps_namespace = namespace_manager.google_apps_namespace
 
 
 # Helper functions.
+def get_current_version_name_safe():
+  """Returns the current version of the app, or None if there is no current version found."""
+  try:
+    return modules.get_current_version_name()
+  except KeyError:
+    return None
+
+
+def get_current_module_name_safe():
+  """Returns the current module of the app, or None if there is no current module found.."""
+  try:
+    return modules.get_current_module_name()
+  except KeyError:
+    return None
 
 
 def is_host_google():
@@ -97,6 +117,15 @@ def is_default_version(version=None):
   return version == get_default_version()
 
 
+def is_default_version_safe(version=None):
+  """
+  True if the current or specified app version is the default.
+  Returns False when there is no version found.
+  """
+  version = version or get_current_version_name_safe()
+  return version == get_default_version()
+
+
 def is_development():
   """True if the dev_appserver is running (localhost or local development server)."""
   return os.environ.get('SERVER_SOFTWARE', '').startswith('Development')
@@ -107,9 +136,25 @@ def is_staging(version=None):
   return is_host_google() and not is_default_version(version)
 
 
+def is_staging_safe(version=None):
+  """True if the app is hosted by Google (appspot.com) but the version is not the default."""
+  is_default_version = is_default_version_safe()
+  if is_default_version is None:
+    return False
+  return is_host_google() and not is_default_version
+
+
 def is_production(version=None):
   """True if the app is being hosted by Google and the default version."""
   return is_host_google() and is_default_version(version)
+
+
+def is_production_safe(version=None):
+  """True if the app is being hosted by Google and the default version."""
+  is_default_version = is_default_version_safe(version)
+  if is_default_version is None:
+    return False
+  return is_host_google() and is_default_version
 
 
 def get_dot_target_name(version=None, module=None):
@@ -117,6 +162,18 @@ def get_dot_target_name(version=None, module=None):
   version = version or get_current_version_name()
   module = module or get_current_module_name()
   return '-dot-'.join((version, module))
+
+
+def get_dot_target_name_safe(version=None, module=None):
+  """
+  Returns the current version/module in -dot- notation which is used by `target:` parameters.
+  If there is no current version or module then None is returned.
+  """
+  version = version or get_current_version_name_safe()
+  module = module or get_current_module_name_safe()
+  if version and module:
+    return '-dot-'.join((version, module))
+  return None
 
 
 def _get_os_environ_dict(keys):
