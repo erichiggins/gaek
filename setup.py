@@ -37,6 +37,7 @@ setup(
     version=version(),
     description="A collection of useful tools for Python apps running on Google App Engine.",
     long_description=readme(),
+    long_description_content_type='text/markdown',
     author="Eric Higgins",
     author_email='erichiggins@gmail.com',
     url='https://github.com/erichiggins/gaek',
