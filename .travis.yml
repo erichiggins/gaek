@@ -14,8 +14,6 @@ script:
 - python setup.py test
 deploy:
   provider: pypi
-  edge:
-    branch: twine-user-install
   user: erichiggins
   on:
     tags: true
