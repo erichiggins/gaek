@@ -4,7 +4,7 @@ python:
 - '2.7'
 - pypy
 before_install:
-- ./setup.sh
+- "./setup.sh"
 - source .dev_env/bin/activate
 install:
 - pip install --upgrade setuptools
@@ -14,8 +14,9 @@ script:
 - python setup.py test
 deploy:
   provider: pypi
-  user: erichiggins
+  user: __token__
+  password:
+    - secure: "oX4Hg8EDIo4RDoqHwYSBi9lVHRcrQl1sdySdR+JnSIpRO0D0ckTDwoz6nuejRe4/2YEGyIYSkPsUEnMMQmiDS5jkgqr1JNV3s8I2JjjCryof5si2Jf5Mk7gbqprEgJqgnKK551HovP35e/fvwpb1wiEddjDPSYN8UF8kbjTPGOE="
+    - secure: "cCgbdtJAi0GyzVd2DRo8irQvohE8zIM3WbwcPx1F/+OcWNuvb0xDOOVIcnVD2r5KqcUqTwyNjWdBBLhkMNiwKfwVVAVPwj9cEi6YIjlEiD49kIMswcgzZM5E6dxVQ1IgDtdbI8YpAbopl4iTLz7qO9FHCyHJ049d5K91/8212Eo="
   on:
     tags: true
-  password:
-    secure: Ilet7Gy13l3rHmYDe35uxtGdhj1L3Q9p4KTTe/Q4Oo6CobvvsYgctfDGOFgwrNzy+vYDm9P4usUxu3Em//X46CQ5510YZXkYYQV57CPEbgWRx0Bz1ki221PMtuZkA38PEj5SWBQtQxvseDY7bKbP48XBvrI2GRzcJ8MXBKaPPBI=
