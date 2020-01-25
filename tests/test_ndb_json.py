@@ -19,6 +19,11 @@ from nose import tools
 from gaek import ndb_json
 
 
+__all__ = [
+  'TestNdbJson',
+]
+
+
 class TestNdbJson(unittest.TestCase):
 
     def setUp(self):

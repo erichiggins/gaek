@@ -1,3 +1,7 @@
+0.4.1
+=====
+- Upgraded PyYAML version in test requirement for security fix.
+
 0.4.0
 =====
 - Added `_safe` methods for functions which break outside of the GAE environment.

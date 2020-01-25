@@ -19,6 +19,11 @@ from google.appengine.ext import testbed
 from gaek import environ
 
 
+__all__ = [
+  'TestEnviron',
+]
+
+
 class TestEnviron(unittest.TestCase):
 
     def setUp(self):
