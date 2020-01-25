@@ -25,8 +25,7 @@ Usage:
 When the encoder meets a property of the `ndb.Key` type, 
 there are three encoding options available:   
 
-* `ndb_keys_as_entities` - encode Key property as a `Future` whose eventual result is the entity for the key.
- This is the default option.
+* `ndb_keys_as_entities` - encode Key property as a `Future` whose eventual result is the entity for the key. (**default**)
 * `ndb_keys_as_pairs` - encode Key property as a tuple of (kind, id) pairs.
 * `ndb_keys_as_urlsafe` - encode Key property as a websafe-base64-encoded serialized version of the key.
 
