@@ -12,14 +12,3 @@ install:
 - pip install -r requirements.txt
 script:
 - python setup.py test
-before_deploy:
-- pip install twine
-deploy:
-  provider: pypi
-  edge: true
-  user: "__token__"
-  password:
-    - secure: "oX4Hg8EDIo4RDoqHwYSBi9lVHRcrQl1sdySdR+JnSIpRO0D0ckTDwoz6nuejRe4/2YEGyIYSkPsUEnMMQmiDS5jkgqr1JNV3s8I2JjjCryof5si2Jf5Mk7gbqprEgJqgnKK551HovP35e/fvwpb1wiEddjDPSYN8UF8kbjTPGOE="
-    - secure: "cCgbdtJAi0GyzVd2DRo8irQvohE8zIM3WbwcPx1F/+OcWNuvb0xDOOVIcnVD2r5KqcUqTwyNjWdBBLhkMNiwKfwVVAVPwj9cEi6YIjlEiD49kIMswcgzZM5E6dxVQ1IgDtdbI8YpAbopl4iTLz7qO9FHCyHJ049d5K91/8212Eo="
-  on:
-    tags: true
