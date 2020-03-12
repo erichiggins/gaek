@@ -26,10 +26,15 @@ __email__ = 'erichiggins@gmail.com'
 
 
 import os
+import warnings
 
 from google.appengine.api import app_identity
 from google.appengine.api import modules
-from google.appengine.api import namespace_manager
+
+try:
+  from google.appengine.api import namespace_manager
+except ImportError:
+  namespace_manager = None
 
 
 __all__ = (
@@ -85,8 +90,16 @@ get_versions = modules.get_versions
 
 
 # Namespace functions.
-get_namespace = namespace_manager.get_namespace
-google_apps_namespace = namespace_manager.google_apps_namespace
+if namespace_manager == None:
+  get_namespace = deprecated_fn
+  google_apps_namespace = deprecated_fn
+else:
+  get_namespace = namespace_manager.get_namespace
+  google_apps_namespace = namespace_manager.google_apps_namespace
+
+
+def deprecated_fn():
+  warnings.warn('deprecated', DeprecationWarning)
 
 
 # Helper functions.
@@ -191,9 +204,21 @@ def _get_modules_dict(keys):
   return {k: getattr(modules, k)() for k in keys}
 
 
-def _get_namespace_manager_dict(keys):
+def _get_namespace_manager_dict_v2(keys):
+  """Returns an empty dictionary since the namespace_manager API has been deprecated."""
+  return {}
+
+
+def _get_namespace_manager_dict_v1(keys):
   """Return a dictionary of key/values from the namespace_manager module functions."""
   return {k: getattr(namespace_manager, k)() for k in keys}
+
+
+# Swap the function that's called if the namespace_manager is disabled.
+if namespace_manager == None:
+  _get_namespace_manager_dict = _get_namespace_manager_dict_v2
+else:
+  _get_namespace_manager_dict = _get_namespace_manager_dict_v1
 
 
 def get_environ_dict():
