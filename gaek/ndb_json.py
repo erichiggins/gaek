@@ -50,11 +50,18 @@ __all__ = (
 )
 
 
+# Support Py 2.7 and 3.x
+try:
+  STR_TYPE = types.StringType
+except AttributeError:
+  STR_TYPE = bytes
+
+
 def encode_model(obj):
   """Encode objects like ndb.Model which have a `.to_dict()` method."""
   obj_dict = obj.to_dict()
   for key, val in obj_dict.iteritems():
-    if isinstance(val, types.StringType):
+    if isinstance(val, STR_TYPE):
       try:
         unicode(val)
       except UnicodeDecodeError:
@@ -126,9 +133,16 @@ NDB_TYPE_ENCODING = {
   datetime.date: encode_datetime,
   datetime.datetime: encode_datetime,
   time.struct_time: encode_generator,
-  types.ComplexType: encode_complex,
   ndb.model._BaseValue: encode_basevalue,
 }
+
+
+# Support Py 2.7 and 3.x
+try:
+  NDB_TYPE_ENCODING[types.ComplexType] = encode_complex
+except AttributeError:
+  NDB_TYPE_ENCODING[complex] = encode_complex
+
 
 # Sort the types so any iteration is in a deterministic order
 NDB_TYPES = sorted(NDB_TYPE_ENCODING.keys(), key=lambda t: t.__name__)
