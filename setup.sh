@@ -3,6 +3,7 @@
 GAE_SDK_SHA1='35c6857852f787ab777824ceaf645964cff696bc'
 GAE_SDK_FILE='google_appengine_1.9.88.zip'
 SITE_PKGS="$(python -c 'import sys; print(sys.path[-1])')"
+PYTHON_VERSION="$(python -c 'import platform; print(platform.python_version())')"
 ENV_PATH="$(pwd)/.dev_env"
 
 # Create virtual environment outside of CI.
@@ -12,7 +13,7 @@ if [[ -z "${CONTINUOUS_INTEGRATION}" ]]; then
   source $ENV_PATH/bin/activate
   SITE_PKGS="$(python -c 'import sys; print(sys.path[-1])')"
 else
-  ENV_PATH="~/virtualenv/python$TRAVIS_PYTHON_VERSION"
+  ENV_PATH="~/virtualenv/python$PYTHON_VERSION"
 fi
 
 pip install --upgrade ndg-httpsclient
