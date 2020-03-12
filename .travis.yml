@@ -7,7 +7,6 @@ python:
 - pypy
 before_install:
 - "./setup.sh"
-- source .dev_env/bin/activate
 install:
 - pip install --upgrade setuptools
 - pip install .
